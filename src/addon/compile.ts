@@ -1,5 +1,5 @@
-import resolveConfig = require("tailwindcss/resolveConfig");
-import { Config } from "tailwindcss/types/config";
+import resolveConfig = require('tailwindcss/resolveConfig');
+import { Config } from 'tailwindcss/types/config';
 import { compile as mdxCompile } from '@storybook/mdx2-csf';
 
 const fixMdx = (colors: Record<string, any>) => `
@@ -19,12 +19,9 @@ import { ColorItem, ColorPalette } from "@storybook/blocks";
   </ColorPalette>
 `;
 
-
-export const compile = async (
-  config: Config,
-) => {
-  // TODO: Fix non-object vals in Colors
-  const fullConfig = resolveConfig(config)
-  const colors = fullConfig.theme.colors;
-  return await mdxCompile(fixMdx(colors), {});
+export const compile = async (config: Config) => {
+    // TODO: Fix non-object vals in Colors
+    const fullConfig = resolveConfig(config);
+    const colors = fullConfig.theme.colors;
+    return await mdxCompile(fixMdx(colors), {});
 };

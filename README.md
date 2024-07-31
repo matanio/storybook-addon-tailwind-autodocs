@@ -1,10 +1,11 @@
 # Storybook Addon Tailwind Autodocs
+
 Design system documentation that comes directly from your tailwind config.
 
 ### Development scripts
 
-- `npm run start` runs babel in watch mode and starts Storybook
-- `npm run build` build and package your addon code
+-   `npm run start` runs babel in watch mode and starts Storybook
+-   `npm run build` build and package your addon code
 
 ### Switch from TypeScript to JavaScript
 
@@ -18,17 +19,17 @@ This will convert all code to JS. It is a destructive process, so we recommended
 
 The addon code lives in `src`. It demonstrates all core addon related concepts. The three [UI paradigms](https://storybook.js.org/docs/react/addons/addon-types#ui-based-addons)
 
-- `src/Tool.tsx`
-- `src/Panel.tsx`
-- `src/Tab.tsx`
+-   `src/Tool.tsx`
+-   `src/Panel.tsx`
+-   `src/Tab.tsx`
 
 Which, along with the addon itself, are registered in `src/manager.ts`.
 
 Managing State and interacting with a story:
 
-- `src/withGlobals.ts` & `src/Tool.tsx` demonstrates how to use `useGlobals` to manage global state and modify the contents of a Story.
-- `src/withRoundTrip.ts` & `src/Panel.tsx` demonstrates two-way communication using channels.
-- `src/Tab.tsx` demonstrates how to use `useParameter` to access the current story's parameters.
+-   `src/withGlobals.ts` & `src/Tool.tsx` demonstrates how to use `useGlobals` to manage global state and modify the contents of a Story.
+-   `src/withRoundTrip.ts` & `src/Panel.tsx` demonstrates two-way communication using channels.
+-   `src/Tab.tsx` demonstrates how to use `useParameter` to access the current story's parameters.
 
 Your addon might use one or more of these patterns. Feel free to delete unused code. Update `src/manager.ts` and `src/preview.ts` accordingly.
 
@@ -38,17 +39,17 @@ Lastly, configure you addon name in `src/constants.ts`.
 
 Addons can interact with a Storybook project in multiple ways. It is recommended to familiarize yourself with [the basics](https://storybook.js.org/docs/react/addons/introduction) before getting started.
 
-- Manager entries are used to add UI or behavior to the Storybook manager UI.
-- Preview entries are used to add UI or behavior to the preview iframe where stories are rendered.
-- Presets are used to modify the Storybook configuration, similar to how [users can configure their `main.ts` configurations](https://storybook.js.org/docs/react/api/main-config).
+-   Manager entries are used to add UI or behavior to the Storybook manager UI.
+-   Preview entries are used to add UI or behavior to the preview iframe where stories are rendered.
+-   Presets are used to modify the Storybook configuration, similar to how [users can configure their `main.ts` configurations](https://storybook.js.org/docs/react/api/main-config).
 
 Since each of these places represents a different environment with different features and modules, it is also recommended to split and build your modules accordingly. This addon-kit comes with a preconfigured [bundling configuration](./tsup.config.ts) that supports this split, and you are free to modify and extend it as needed.
 
 You can define which modules match which environments in the [`package.json#bundler`](./package.json) property:
 
-- `exportEntries` is a list of module entries that users can manually import from anywhere they need to. For example, you could have decorators that users need to import into their `preview.ts` file or utility functions that can be used in their `main.ts` files.
-- `managerEntries` is a list of module entries meant only for the manager UI. These modules will be bundled to ESM and won't include types since they are mostly loaded by Storybook directly.
-- `previewEntries` is a list of module entries meant only for the preview UI. These modules will be bundled to ESM and won't include types since they are mostly loaded by Storybook directly.
+-   `exportEntries` is a list of module entries that users can manually import from anywhere they need to. For example, you could have decorators that users need to import into their `preview.ts` file or utility functions that can be used in their `main.ts` files.
+-   `managerEntries` is a list of module entries meant only for the manager UI. These modules will be bundled to ESM and won't include types since they are mostly loaded by Storybook directly.
+-   `previewEntries` is a list of module entries meant only for the preview UI. These modules will be bundled to ESM and won't include types since they are mostly loaded by Storybook directly.
 
 Manager and preview entries are only used in the browser so they only output ESM modules. Export entries could be used both in the browser and in Node depending on their use case, so they both output ESM and CJS modules.
 
@@ -156,16 +157,16 @@ registering the addon, like so:
 import type { StorybookConfig } from '@storybook/your-framework';
 
 const config: StorybookConfig = {
-  // ...rest of config
-  addons: [
-    '@storybook/essentials',
-    {
-      name: 'my-addon',
-      options: {
-        // 👈 options for my-addon go here
-      },
-    },
-  ],
+    // ...rest of config
+    addons: [
+        '@storybook/essentials',
+        {
+            name: 'my-addon',
+            options: {
+                // 👈 options for my-addon go here
+            },
+        },
+    ],
 };
 
 export default config;
@@ -176,7 +177,6 @@ export default config;
 Type: `boolean`
 
 Enable experimental behavior to...
-
 ````
 
 ## Release Management
@@ -185,14 +185,14 @@ Enable experimental behavior to...
 
 This project is configured to use [auto](https://github.com/intuit/auto) for release management. It generates a changelog and pushes it to both GitHub and npm. Therefore, you need to configure access to both:
 
-- [`NPM_TOKEN`](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens) Create a token with both _Read and Publish_ permissions.
-- [`GH_TOKEN`](https://github.com/settings/tokens) Create a token with the `repo` scope.
+-   [`NPM_TOKEN`](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens) Create a token with both _Read and Publish_ permissions.
+-   [`GH_TOKEN`](https://github.com/settings/tokens) Create a token with the `repo` scope.
 
 Then open your `package.json` and edit the following fields:
 
-- `name`
-- `author`
-- `repository`
+-   `name`
+-   `author`
+-   `repository`
 
 #### Local
 
@@ -227,7 +227,7 @@ npm run release
 
 That will:
 
-- Build and package the addon code
-- Bump the version
-- Push a release to GitHub and npm
-- Push a changelog to GitHub
+-   Build and package the addon code
+-   Bump the version
+-   Push a release to GitHub and npm
+-   Push a changelog to GitHub
