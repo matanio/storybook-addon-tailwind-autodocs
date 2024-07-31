@@ -1,1 +1,4 @@
+# Ignore artifacts:
 dist
+build
+coverage
