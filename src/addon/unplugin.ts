@@ -1,6 +1,6 @@
 import { createUnplugin } from 'unplugin';
 import { serverRequire } from '@storybook/core-common';
-import { compile } from './compile';
+import { compileTailwindConfig } from './compileTailwindConfig';
 
 export const TAILWIND_REGEX = /tailwind\.config\.[jt]s/;
 
@@ -14,7 +14,7 @@ export const unplugin = createUnplugin(() => {
         async load(fileName) {
             delete require.cache[fileName];
             const config = await serverRequire(fileName);
-            return await compile(config);
+            return await compileTailwindConfig(config);
         },
     };
 });

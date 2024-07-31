@@ -1,7 +1,7 @@
 import type { Indexer } from '@storybook/types';
 import { loadCsf } from '@storybook/csf-tools';
 import { serverRequire } from '@storybook/core-common';
-import { compile } from './compile';
+import { compileTailwindConfig } from './compileTailwindConfig';
 import { vite, webpack, TAILWIND_REGEX } from './unplugin';
 
 const logger = console;
@@ -12,7 +12,7 @@ const dynamicIndexer: Indexer = {
         logger.log('indexing', fileName);
         delete require.cache[fileName];
         const config = await serverRequire(fileName);
-        const compiled = await compile(config);
+        const compiled = await compileTailwindConfig(config);
         const indexed = loadCsf(compiled, {
             ...opts,
             fileName,
@@ -29,7 +29,7 @@ const dynamicIndexer: Indexer = {
                 metaId: undefined,
                 tags: ['stories-mdx'],
                 metaTags: ['stories-mdx'],
-                __id: 'theme-test-hello--docs', // TODO: update when we have a better id.
+                __id: 'theme-colors--docs', // TODO: update when we have a better id.
                 storiesImports: undefined, // not needed since we don't ref stories
             },
         ];

@@ -4,7 +4,7 @@ Design system documentation that comes directly from your tailwind config.
 
 ### Development scripts
 
--   `npm run start` runs babel in watch mode and starts Storybook
+-   `npm run start` runs vite in watch mode and starts Storybook
 -   `npm run build` build and package your addon code
 
 ### Switch from TypeScript to JavaScript
