@@ -1,8 +1,9 @@
 import type { Indexer } from '@storybook/types';
 import { loadCsf } from '@storybook/csf-tools';
 import { serverRequire } from '@storybook/core-common';
-import { compileTailwindConfig } from './compileTailwindConfig';
+import { compileTailwindColors } from './compileTailwindConfig';
 import { vite, webpack, TAILWIND_REGEX } from './unplugin';
+import resolveConfig from 'tailwindcss/resolveConfig';
 
 const logger = console;
 
@@ -12,7 +13,9 @@ const dynamicIndexer: Indexer = {
         logger.log('indexing', fileName);
         delete require.cache[fileName];
         const config = await serverRequire(fileName);
-        const compiled = await compileTailwindConfig(config);
+        const fullTailwindConfig = resolveConfig(config);
+        const colors = fullTailwindConfig.theme.colors;
+        const compiled = await compileTailwindColors(colors);
         const indexed = loadCsf(compiled, {
             ...opts,
             fileName,

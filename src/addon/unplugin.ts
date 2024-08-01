@@ -1,6 +1,7 @@
 import { createUnplugin } from 'unplugin';
 import { serverRequire } from '@storybook/core-common';
-import { compileTailwindConfig } from './compileTailwindConfig';
+import { compileTailwindColors } from './compileTailwindConfig';
+import resolveConfig from 'tailwindcss/resolveConfig';
 
 export const TAILWIND_REGEX = /tailwind\.config\.[jt]s/;
 
@@ -14,7 +15,9 @@ export const unplugin = createUnplugin(() => {
         async load(fileName) {
             delete require.cache[fileName];
             const config = await serverRequire(fileName);
-            return await compileTailwindConfig(config);
+            const fullTailwindConfig = resolveConfig(config);
+            const colors = fullTailwindConfig.theme.colors;
+            return await compileTailwindColors(colors);
         },
     };
 });

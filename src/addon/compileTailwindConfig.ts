@@ -36,9 +36,7 @@ import { ColorItem, ColorPalette } from "@storybook/blocks";
     `;
 };
 
-export const compileTailwindConfig = async (config: Config) => {
-    const fullTailwindConfig = resolveConfig(config);
-    const colors = fullTailwindConfig.theme.colors;
+export const compileTailwindColors = async (colors: Record<string, any>) => {
     const groupedColors = groupTailwindColors(colors);
     return await mdxCompile(fixMdx(groupedColors), {});
 };
