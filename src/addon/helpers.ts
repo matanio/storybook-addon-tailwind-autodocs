@@ -47,10 +47,7 @@ export const getTypography = (
     fontFamilies: Record<string, any>
 ): Typography => {
     const extractedFontSizes = extractFontSizes(fontSizes);
-    console.log(extractedFontSizes);
-    console.log(fontWeights);
     const fontFamilyStrings = getFontFamiliesAsStrings(fontFamilies);
-    console.log(fontFamilyStrings);
     return {
         type: fontFamilyStrings,
         weight: fontWeights,
