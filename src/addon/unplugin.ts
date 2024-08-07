@@ -17,7 +17,15 @@ export const unplugin = createUnplugin(() => {
             const config = await serverRequire(fileName);
             const fullTailwindConfig = resolveConfig(config);
             const colors = fullTailwindConfig.theme.colors;
-            return await getCsfFromConfig(colors);
+            const fontSizes = fullTailwindConfig.theme.fontSize;
+            const fontWeights = fullTailwindConfig.theme.fontWeight;
+            const fontFamilies = fullTailwindConfig.theme.fontFamily;
+            return await getCsfFromConfig(
+                colors,
+                fontSizes,
+                fontWeights,
+                fontFamilies
+            );
         },
     };
 });

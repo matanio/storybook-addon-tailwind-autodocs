@@ -1,8 +1,6 @@
 import type { Indexer, IndexInput } from '@storybook/types';
 import { TAILWIND_REGEX, vite, webpack } from './unplugin';
 
-const logger = console;
-
 const dynamicIndexer: Indexer = {
     test: TAILWIND_REGEX,
     createIndex: async () => {

@@ -1,14 +1,22 @@
-import allColors from 'tailwindcss/colors';
+import { TAILWIND_BASE_RATIO, Typography } from './helpers';
 
-export const generateThemeMdx = (colors: Record<string, any>) => {
-    const colorEntries = Object.entries(colors).map(([key, value]) => ({
-        key,
-        value,
-        subtitle: getSubtitle(key),
-    }));
+export const generateThemeMdx = (
+    colors: Record<string, any>,
+    typography: Typography
+) => {
+    const fontSizes = Object.values(typography.size);
+    const fontWeights = Object.entries(typography.weight);
+    const formattedFontWeights = fontWeights.map(([label, weightValue]) => {
+        return `${weightValue}(${label})`;
+    });
+    const fontFamilies = Object.entries(typography.type);
+
+    const SampleText =
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+
     return `
 import { Meta } from '@storybook/blocks';
-import { ColorItem, ColorPalette, Title, Subtitle } from "@storybook/blocks";
+import { ColorItem, ColorPalette, Title, Subtitle, Typeset } from "@storybook/blocks";
 
 <Meta title="Theme" />
 <Title>Theme</Title>
@@ -17,25 +25,41 @@ import { ColorItem, ColorPalette, Title, Subtitle } from "@storybook/blocks";
 <details>
 <summary style={{fontFamily: 'Nunito Sans', fontSize: '20px', marginBottom: '1rem', fontWeight: '700'}}>Colors</summary>
 <ColorPalette>
-    {${JSON.stringify(colorEntries)}.map(({ key, value, subtitle }) => (
-      <ColorItem
-        key={key}
-        title={key}
-        subtitle={subtitle}
-        colors={value}
-      />
+    {${JSON.stringify(colors)}.map(({ key, value, subtitle }) => (
+        <ColorItem
+            key={key}
+            title={key}
+            subtitle={subtitle}
+            colors={value}
+        />
     ))}
-  </ColorPalette>
+</ColorPalette>
+</details>
+${'}'}
+
+ ${'{'}
+<details>
+<summary style={{fontFamily: 'Nunito Sans', fontSize: '20px', marginBottom: '1rem', fontWeight: '700'}}>Typography</summary>
+<div style={{marginBottom: '1rem', fontFamily: 'Nunito Sans'}}>
+<i>Note: 1rem = ${TAILWIND_BASE_RATIO}px</i>
+</div>
+
+{${JSON.stringify(fontFamilies)}.map(([label, fontFamily]) => (
+    <details>
+    <summary style={{fontFamily: fontFamily, fontSize: '18px', marginBottom: '1rem', marginLeft: '1rem', fontWeight: '500', textTransform: 'capitalize'}}>{label}</summary>
+    <div style={{marginLeft: '1rem'}}>
+        <b>Weights:</b> ${formattedFontWeights.join(', ')}
+        <Typeset 
+            fontSizes={${JSON.stringify(fontSizes)}}
+            fontWeight={400}
+            sampleText={\`${SampleText}\`}
+            fontFamily={fontFamily}
+        />
+    </div>
+    </details>
+    
+))}
 </details>
 ${'}'}
 `;
-};
-
-// TODO: Add ability to turn this off based off user input
-export const getSubtitle = (color: string): string => {
-    // FIXME: Slightly naive check, but it should work for now
-    const isDefaultColor = Object.keys(allColors).includes(color);
-    const defaultColorMessage = 'Default color from Tailwind CSS';
-    const customColorMessage = 'Custom color';
-    return isDefaultColor ? defaultColorMessage : customColorMessage;
 };
