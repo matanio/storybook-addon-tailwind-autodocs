@@ -1,9 +1,13 @@
 {
   "name": "storybook-addon-tailwind-autodocs",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Design system documentation that comes directly from your tailwind config.",
   "keywords": [
     "tailwind",
+    "css",
+    "layout",
+    "appearance",
+    "style",
     "design",
     "system",
     "auto",
@@ -100,14 +104,7 @@
     "displayName": "Tailwind Autodocs",
     "supportedFrameworks": [
       "react",
-      "vue",
-      "angular",
-      "web-components",
-      "ember",
-      "html",
-      "svelte",
-      "preact",
-      "react-native"
+      "vue"
     ],
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   }
