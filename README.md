@@ -10,10 +10,14 @@ Demo: _Coming Soon!_ 🚀
 - Works with Hot Module Reloading (HMR); so changes to your tailwind config are reflected in the storybook immediately
 - Displays the theme colors and typography using Storybook's doc blocks
 
-_More features coming soon:_
+_...and more features that are hopefully coming soon:_
 
-- Support for Spacing and Screen Break Points 📏
-- Splitting up the documentation into separate tabs 🗂️
+- _Adding autodocs for tailwind spacing and screen break points_
+- _Splitting up the documentation into separate tabs/entries_
+
+## Requirements
+- Storybook
+- TailwindCSS
 
 ## Installation
 
@@ -33,13 +37,13 @@ import type { StorybookConfig } from '@storybook/your-framework';
 
 const config: StorybookConfig = {
     stories: [
-        // ... rest of stories entries
+    // ...
         '../tailwind.config.js', // 👈 replace with your tailwind configs path
     ],
-    // ...rest of config
+// ...
     addons: [
-    '@storybook/addon-essentials'
-    'storybook-addon-tailwind-autodocs', // 👈 register the addon here
+        '@storybook/addon-essentials'
+    '   storybook-addon-tailwind-autodocs', // 👈 register the addon here
     ],
 };
 
@@ -48,4 +52,4 @@ export default config;
 
 Then, run storybook with `npm run storybook`
 
-And there you go! You should now see a new tab in your storybook called "Theme".
+And there you go! You should now see a new tab in your storybook called "Theme". 🎉
