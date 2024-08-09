@@ -40,13 +40,13 @@ import type { StorybookConfig } from '@storybook/your-framework';
 
 const config: StorybookConfig = {
     stories: [
-    // ...
+        // ...
         '../tailwind.config.js', // 👈 replace with your tailwind configs path
     ],
-// ...
+    // ...
     addons: [
-        '@storybook/addon-essentials'
-    '   storybook-addon-tailwind-autodocs', // 👈 register the addon here
+        '@storybook/addon-essentials',
+        'storybook-addon-tailwind-autodocs', // 👈 register the addon here
     ],
 };
 
