@@ -1,12 +1,77 @@
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from 'tsup';
+import { readFile } from 'node:fs/promises';
+import { globalPackages as globalManagerPackages } from 'storybook/internal/manager/globals';
+import { globalPackages as globalPreviewPackages } from 'storybook/internal/preview/globals';
 
-export default defineConfig({
-    entry: ['src/addon/preset.ts'],
-    outDir: 'dist',
-    format: ['cjs', 'esm'],
-    dts: true,
-    splitting: false,
-    sourcemap: true,
-    clean: true,
-    external: ['esbuild'], // Mark esbuild as external
+// The current browsers supported by Storybook v7
+const BROWSER_TARGET: Options['target'] = [
+    'chrome100',
+    'safari15',
+    'firefox91',
+];
+const NODE_TARGET: Options['target'] = ['node18'];
+
+type BundlerConfig = {
+    bundler?: {
+        exportEntries?: string[];
+        nodeEntries?: string[];
+    };
+};
+
+export default defineConfig(async options => {
+    // reading the three types of entries from package.json, which has the following structure:
+    // {
+    //  ...
+    //   "bundler": {
+    //     "exportEntries": ["./src/index.ts"],
+    //     "nodeEntries": ["./src/preset.ts"]
+    //   }
+    // }
+    const packageJson = (await readFile('./package.json', 'utf8').then(
+        JSON.parse
+    )) as BundlerConfig;
+    const { bundler: { exportEntries = [], nodeEntries = [] } = {} } =
+        packageJson;
+
+    const commonConfig: Options = {
+        splitting: false,
+        minify: !options.watch,
+        treeshake: true,
+        sourcemap: true,
+        clean: options.watch ? false : true,
+    };
+
+    const configs: Options[] = [];
+
+    // export entries are entries meant to be manually imported by the user
+    // they are not meant to be loaded by the manager or preview
+    // they'll be usable in both node and browser environments, depending on which features and modules they depend on
+    if (exportEntries.length) {
+        configs.push({
+            ...commonConfig,
+            entry: exportEntries,
+            dts: {
+                resolve: true,
+            },
+            format: ['esm', 'cjs'],
+            target: [...BROWSER_TARGET, ...NODE_TARGET],
+            platform: 'neutral',
+            external: [...globalManagerPackages, ...globalPreviewPackages],
+        });
+    }
+
+    // node entries are entries meant to be used in node-only
+    // this is useful for presets, which are loaded by Storybook when setting up configurations
+    // they won't have types generated for them as they're usually loaded automatically by Storybook
+    if (nodeEntries.length) {
+        configs.push({
+            ...commonConfig,
+            entry: nodeEntries,
+            format: ['cjs'],
+            target: NODE_TARGET,
+            platform: 'node',
+        });
+    }
+
+    return configs;
 });
