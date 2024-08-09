@@ -1,3 +1,18 @@
+# v1.0.2 (Sat Aug 10 2024)
+
+#### ⚠️ Pushed to `main`
+
+- docs: corrected spacing in README ([@matanio](https://github.com/matanio))
+- chore: ran fresh install ([@matanio](https://github.com/matanio))
+- chore: updated preset loading ([@matanio](https://github.com/matanio))
+- chore: updated tsup config ([@matanio](https://github.com/matanio))
+
+#### Authors: 1
+
+- Matan Yosef ([@matanio](https://github.com/matanio))
+
+---
+
 # v1.0.1 (Sat Aug 10 2024)
 
 #### ⚠️ Pushed to `main`
