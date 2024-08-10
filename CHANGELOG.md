@@ -1,3 +1,15 @@
+# v1.0.4 (Sat Aug 10 2024)
+
+#### ⚠️ Pushed to `main`
+
+- ci: added git config ([@matanio](https://github.com/matanio))
+
+#### Authors: 1
+
+- Matan Yosef ([@matanio](https://github.com/matanio))
+
+---
+
 # v1.0.2 (Sat Aug 10 2024)
 
 #### ⚠️ Pushed to `main`
