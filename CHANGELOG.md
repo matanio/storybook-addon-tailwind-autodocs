@@ -1,3 +1,15 @@
+# v1.0.8 (Thu Aug 15 2024)
+
+#### ⚠️ Pushed to `main`
+
+- docs: Update README.md ([@matanio](https://github.com/matanio))
+
+#### Authors: 1
+
+- Matan Yosef ([@matanio](https://github.com/matanio))
+
+---
+
 # v1.0.6 (Thu Aug 15 2024)
 
 #### 🐛 Bug Fix
