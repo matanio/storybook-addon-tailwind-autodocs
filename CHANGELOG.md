@@ -1,3 +1,15 @@
+# v1.0.5 (Tue Aug 13 2024)
+
+#### 🐛 Bug Fix
+
+- Adding a Storybook demo [#2](https://github.com/matanio/storybook-addon-tailwind-autodocs/pull/2) ([@matanio](https://github.com/matanio))
+
+#### Authors: 1
+
+- Matan Yosef ([@matanio](https://github.com/matanio))
+
+---
+
 # v1.0.4 (Sat Aug 10 2024)
 
 #### ⚠️ Pushed to `main`
