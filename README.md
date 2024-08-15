@@ -2,7 +2,10 @@
 
 Design system documentation that comes directly from your tailwind config.
 
-Demo: _Coming Soon!_ 🚀
+Demo: [Storybook](https://matanio.github.io/storybook-addon-tailwind-autodocs/)*
+
+_*This uses the [`tailwind.config.js`](https://github.com/matanio/storybook-addon-tailwind-autodocs/blob/main/tailwind.config.js) file from this project_
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/d7e2da9b-a674-44d6-9638-484073990921" />
 </p>
