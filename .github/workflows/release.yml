@@ -1,10 +1,6 @@
 name: Release
 
-on:
-  # Event for the workflow to run on
-  push:
-    branches:
-      - 'main'
+on: [push]
 
 jobs:
   release:
