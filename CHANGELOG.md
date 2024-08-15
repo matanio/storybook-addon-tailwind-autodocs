@@ -1,3 +1,15 @@
+# v1.0.6 (Thu Aug 15 2024)
+
+#### 🐛 Bug Fix
+
+- Revert "ci: updated release action to only occur on main" [#3](https://github.com/matanio/storybook-addon-tailwind-autodocs/pull/3) ([@matanio](https://github.com/matanio))
+
+#### Authors: 1
+
+- Matan Yosef ([@matanio](https://github.com/matanio))
+
+---
+
 # v1.0.5 (Tue Aug 13 2024)
 
 #### 🐛 Bug Fix
