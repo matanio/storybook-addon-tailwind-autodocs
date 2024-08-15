@@ -1,6 +1,6 @@
 {
   "name": "storybook-addon-tailwind-autodocs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Design system documentation that comes directly from your tailwind config.",
   "keywords": [
     "tailwind",
