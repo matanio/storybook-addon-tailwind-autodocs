@@ -89,7 +89,7 @@ const convertRemToPx = (rem: string): string => {
     return `${parseFloat(rem) * TAILWIND_BASE_RATIO}px`;
 };
 
-const getFontFamiliesAsStrings = (
+export const getFontFamiliesAsStrings = (
     fontFamilies: Record<string, string[]>
 ): Record<string, string> => {
     const fontFamiliesAsStrings: Record<string, string> = {};
