@@ -26,15 +26,6 @@ export const groupTailwindColors = (colors: Record<string, any>) => {
     }));
 };
 
-// TODO: Add ability to turn this off based off user input
-const getSubtitle = (color: string): string => {
-    // FIXME: Slightly naive check, but it should work for now
-    const isDefaultColor = Object.keys(allColors).includes(color);
-    const defaultColorMessage = 'Default color from Tailwind CSS';
-    const customColorMessage = 'Custom color';
-    return isDefaultColor ? defaultColorMessage : customColorMessage;
-};
-
 export interface Typography {
     type: Record<string, string>;
     weight: Record<string, string>;
@@ -97,4 +88,25 @@ export const getFontFamiliesAsStrings = (
         fontFamiliesAsStrings[key] = fontFamilies[key].join(', ');
     }
     return fontFamiliesAsStrings;
+};
+
+// TODO: Add ability to turn this off based off user input
+export const getSubtitle = (
+    colorLabel: string,
+    values: Record<string, string>
+): string => {
+    const defaultColorMessage = 'Default color from Tailwind CSS';
+    const customColorMessage = 'Custom color';
+
+    if (!allColors.hasOwnProperty(colorLabel)) {
+        return customColorMessage;
+    }
+
+    // FIXME: TS error
+    const tailwindColors = allColors[colorLabel];
+
+    const isDefaultColor =
+        JSON.stringify(tailwindColors) === JSON.stringify(values);
+
+    return isDefaultColor ? defaultColorMessage : customColorMessage;
 };
