@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Run Tests
+      - name: Run tests
+        run: npm test
+
       # Run build
       - name: Build Storybook
         run: npm run build
