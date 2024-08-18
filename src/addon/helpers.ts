@@ -1,6 +1,5 @@
 import allColors from 'tailwindcss/colors';
 
-export const TAILWIND_BASE_RATIO = 16;
 /**
  * Group the colors from the resolved Tailwind CSS configuration.
  *
@@ -18,21 +17,12 @@ export const groupTailwindColors = (colors: Record<string, any>) => {
             groupedColors[key] = { [key]: value };
         }
     }
-    // Tranform into an array of objects with key, value, and subtitle
+    // Transform into an array of objects with key, value, and subtitle
     return Object.entries(groupedColors).map(([key, value]) => ({
         key,
         value,
-        subtitle: getSubtitle(key),
+        subtitle: getSubtitle(key, value),
     }));
-};
-
-// TODO: Add ability to turn this off based off user input
-const getSubtitle = (color: string): string => {
-    // FIXME: Slightly naive check, but it should work for now
-    const isDefaultColor = Object.keys(allColors).includes(color);
-    const defaultColorMessage = 'Default color from Tailwind CSS';
-    const customColorMessage = 'Custom color';
-    return isDefaultColor ? defaultColorMessage : customColorMessage;
 };
 
 export interface Typography {
@@ -59,15 +49,15 @@ export const getTypography = (
  * Extract the font sizes from the resolved Tailwind CSS configuration.
  * @param fontSizes
  */
-const extractFontSizes = (
+export const extractFontSizes = (
     fontSizes: Record<string, any>
 ): Record<string, string> => {
     const extractedFontSizes: Record<string, string> = {};
     for (const key in fontSizes) {
         if (Array.isArray(fontSizes[key])) {
-            extractedFontSizes[key] = convertRemToPx(fontSizes[key][0]);
+            extractedFontSizes[key] = getPxValue(fontSizes[key][0]);
         } else {
-            extractedFontSizes[key] = convertRemToPx(fontSizes[key]);
+            extractedFontSizes[key] = getPxValue(fontSizes[key]);
         }
     }
 
@@ -85,11 +75,38 @@ const extractFontSizes = (
     return sortedFontSizesObj;
 };
 
-const convertRemToPx = (rem: string): string => {
-    return `${parseFloat(rem) * TAILWIND_BASE_RATIO}px`;
+// TODO: Add support for other units (or use library which already does this)
+export const TAILWIND_BASE_RATIO = 16;
+const unitConversionRatios: Record<string, number> = {
+    rem: TAILWIND_BASE_RATIO,
+    em: TAILWIND_BASE_RATIO,
+    px: 1,
+    pt: 1.33333, // 1pt = 1.33333px
+    cm: 37.7953, // 1cm = 37.7953px
+    mm: 3.77953, // 1mm = 3.77953px
+    in: 96, // 1in = 96px
+    pc: 16, // 1pc = 16px
+    '%': 0.16, // Assuming 1% of 16px base font size
+};
+export const getPxValue = (size: string): string => {
+    const unitMatch = size.match(/[\d.]+(\D+)$/);
+    if (!unitMatch) {
+        throw new Error(`Invalid size format: ${size}`);
+    }
+
+    const value = parseFloat(size);
+    const unit = unitMatch[1];
+
+    if (!unitConversionRatios[unit]) {
+        throw new Error(`Unsupported unit: ${unit}`);
+    }
+
+    const pxValue = value * unitConversionRatios[unit];
+    const roundedPxValue = parseFloat(pxValue.toFixed(4));
+    return `${roundedPxValue}px`;
 };
 
-const getFontFamiliesAsStrings = (
+export const getFontFamiliesAsStrings = (
     fontFamilies: Record<string, string[]>
 ): Record<string, string> => {
     const fontFamiliesAsStrings: Record<string, string> = {};
@@ -97,4 +114,25 @@ const getFontFamiliesAsStrings = (
         fontFamiliesAsStrings[key] = fontFamilies[key].join(', ');
     }
     return fontFamiliesAsStrings;
+};
+
+// TODO: Add ability to turn this off based off user input
+export const getSubtitle = (
+    colorLabel: string,
+    values: Record<string, string>
+): string => {
+    const defaultColorMessage = 'Default color from Tailwind CSS';
+    const customColorMessage = 'Custom color';
+
+    if (!allColors.hasOwnProperty(colorLabel)) {
+        return customColorMessage;
+    }
+
+    // FIXME: TS error
+    const tailwindColors = allColors[colorLabel];
+
+    const isDefaultColor =
+        JSON.stringify(tailwindColors) === JSON.stringify(values);
+
+    return isDefaultColor ? defaultColorMessage : customColorMessage;
 };
