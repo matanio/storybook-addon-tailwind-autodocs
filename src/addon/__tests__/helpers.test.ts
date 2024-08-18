@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getFontFamiliesAsStrings, getPxValue, getSubtitle } from '../helpers';
+import {
+    extractFontSizes,
+    getFontFamiliesAsStrings,
+    getPxValue,
+    getSubtitle,
+} from '../helpers';
 import allColors from 'tailwindcss/colors';
 
 describe('getFontFamiliesAsStrings', () => {
@@ -169,5 +174,48 @@ describe('getPxValue', () => {
 
     it('should handle empty string correctly', () => {
         expect(() => getPxValue('')).toThrow('Invalid size format: ');
+    });
+});
+
+describe('extractFontSizes', () => {
+    it('should extract and sort font sizes correctly', () => {
+        const fontSizes = { sm: '0.875rem', lg: '1.25rem', md: '1rem' };
+        const result = extractFontSizes(fontSizes);
+        expect(result).toEqual({ sm: '14px', md: '16px', lg: '20px' });
+    });
+
+    it('should handle array font sizes correctly', () => {
+        const fontSizes = { sm: ['0.875rem'], lg: ['1.25rem', '1.5rem'] };
+        const result = extractFontSizes(fontSizes);
+        expect(result).toEqual({ sm: '14px', lg: '20px' });
+    });
+
+    it('should handle font sizes with default line heights correctly', () => {
+        const fontSizes = { sm: ['14px', '20px'], lg: ['20px', '28px'] };
+        const result = extractFontSizes(fontSizes);
+        expect(result).toEqual({ sm: '14px', lg: '20px' });
+    });
+
+    it('should handle font sizes with additional properties correctly', () => {
+        const fontSizes = {
+            '2xl': [
+                '1.5rem',
+                {
+                    lineHeight: '2rem',
+                    letterSpacing: '-0.01em',
+                    fontWeight: '500',
+                },
+            ],
+            '3xl': [
+                '1.875rem',
+                {
+                    lineHeight: '2.25rem',
+                    letterSpacing: '-0.02em',
+                    fontWeight: '700',
+                },
+            ],
+        };
+        const result = extractFontSizes(fontSizes);
+        expect(result).toEqual({ '2xl': '24px', '3xl': '30px' });
     });
 });
