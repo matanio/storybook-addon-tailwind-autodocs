@@ -77,5 +77,4 @@ npm test
 ## Future Work
 
 - Add integration and e2e tests (if valuable)
-- Fix JSX support in plugin (use `<Typography />` instead of `createElement(Typography)`)
 - Add more Tailwind sections (screens, spacing, borderRadius, etc.)

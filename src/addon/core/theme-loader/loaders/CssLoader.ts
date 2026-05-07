@@ -30,7 +30,7 @@ export class CssLoader extends ThemeLoader {
         try {
             const content = readFileSync(filePath, 'utf-8');
             if (!TAILWIND_IMPORT_REGEX.test(content)) return null;
-            return VIRTUAL_FILE_PREFIX + filePath; // TODO: Why doesn't this work if its not jsx?
+            return VIRTUAL_FILE_PREFIX + filePath;
         } catch {
             return null;
         }

@@ -16,7 +16,7 @@ export class ConfigLoader extends ThemeLoader {
 
     public baseResolveId(filePath: string): string | null {
         if (this.isRegexMatch(filePath)) {
-            return VIRTUAL_FILE_PREFIX + filePath; // TODO: Why doesn't this work if its not jsx?
+            return VIRTUAL_FILE_PREFIX + filePath;
         }
         return null;
     }

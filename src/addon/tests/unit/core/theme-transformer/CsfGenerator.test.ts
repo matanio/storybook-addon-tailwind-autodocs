@@ -116,7 +116,7 @@ describe('CsfGenerator', () => {
         };
         const generator = new CsfGenerator(mockAddonOptions);
         const result = generator.generate(colors, typography);
-        expect(result).toContain('createElement(HorizontalRule, null)');
+        expect(result).toContain('<HorizontalRule />');
     });
 
     it('does not include HorizontalRule after last section in single story', () => {
@@ -132,9 +132,7 @@ describe('CsfGenerator', () => {
             weight: {},
             size: {},
         });
-        const hrCount = (
-            result.match(/createElement\(HorizontalRule, null\)/g) || []
-        ).length;
+        const hrCount = (result.match(/<HorizontalRule \/>/g) || []).length;
         expect(hrCount).toBe(0);
     });
 
@@ -166,7 +164,7 @@ describe('CsfGenerator', () => {
         });
         expect(result).toContain('export const AllTheme');
         expect(result).toContain('FontHeaderSection');
-        expect(result).not.toContain('createElement(ColorItem');
-        expect(result).not.toContain("createElement(Title, null, 'Colors')");
+        expect(result).not.toContain('<ColorItem');
+        expect(result).not.toContain('<Title>Colors</Title>');
     });
 });
