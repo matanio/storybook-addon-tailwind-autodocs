@@ -1,5 +1,4 @@
 import { createUnplugin } from 'unplugin';
-import { transformWithEsbuild } from 'vite';
 import { VIRTUAL_FILE_PREFIX } from './constants';
 import { PluginOptions } from './types';
 import { CsfGenerator, ThemeTransformer } from './core/theme-transformer';
@@ -38,6 +37,7 @@ const unplugin = createUnplugin((options: PluginOptions) => {
         vite: {
             async transform(code, id) {
                 if (!id.startsWith(VIRTUAL_FILE_PREFIX)) return null;
+                const { transformWithEsbuild } = await import('vite');
                 return transformWithEsbuild(code, id, {
                     loader: 'jsx',
                     jsx: 'automatic',
