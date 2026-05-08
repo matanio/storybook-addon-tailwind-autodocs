@@ -16,11 +16,11 @@ export class CsfGenerator {
     }
 
     public generate(colors: Color[], typography: Typography): string {
-        if (this.addonOptions.forceSingleDoc !== undefined) {
+        if (this.addonOptions.singleDoc !== undefined) {
             return this.generateSingleStory(
                 colors,
                 typography,
-                sanitizeExportName(this.addonOptions.forceSingleDoc.name)
+                sanitizeExportName(this.addonOptions.singleDoc.name)
             );
         }
         return this.generateMultiStory(colors, typography);
@@ -30,6 +30,7 @@ export class CsfGenerator {
         return `
         import { styled, ThemeProvider, themes, ensure } from 'storybook/theming';
         import { ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks';
+        import { useGlobals } from 'storybook/preview-api';
 
         export default {
             title: 'Theme',
@@ -38,11 +39,15 @@ export class CsfGenerator {
                 options: { bottomPanelHeight: 0 }
             },
             decorators: [
-                (Story) => (
-                    <ThemeProvider theme={ensure(themes.light)}>
-                        <Story />
-                    </ThemeProvider>
-                )
+                (Story) => {
+                    const [globals] = useGlobals();
+                    const isDark = globals['darkMode'] === true || globals['theme'] === 'dark';
+                    return (
+                        <ThemeProvider theme={ensure(isDark ? themes.dark : themes.light)}>
+                            <Story />
+                        </ThemeProvider>
+                    );
+                }
             ]
         };
 
@@ -121,6 +126,21 @@ export class CsfGenerator {
             MozOsxFontSmoothing: 'grayscale',
             WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
             WebkitOverflowScrolling: 'touch',
+        }));
+
+        const CustomBadge = styled.span(({ theme }) => ({
+            display: 'inline-block',
+            fontSize: '10px',
+            fontFamily: theme.typography.fonts.base,
+            fontWeight: theme.typography.weight.bold,
+            color: theme.color.secondary,
+            border: \`1px solid \${theme.color.secondary}\`,
+            borderRadius: '3px',
+            padding: '1px 5px',
+            marginLeft: '8px',
+            verticalAlign: 'middle',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
         }));
         `;
     }

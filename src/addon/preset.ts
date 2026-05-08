@@ -8,15 +8,22 @@ import { TailwindSectionInput, CustomSectionInput } from './types';
 type PresetOptions = {
     defaultPath?: string;
     sections?: TailwindSectionInput[];
+    singleDoc?: CustomSectionInput;
+    /** @deprecated Use `singleDoc` instead. `forceSingleDoc` will be removed in a future major version. */
     forceSingleDoc?: CustomSectionInput;
     presets?: any;
 };
 
 function createAddonOptions(options: PresetOptions): AddonOptions {
+    if (options.forceSingleDoc !== undefined && options.singleDoc === undefined) {
+        console.warn(
+            '[storybook-addon-tailwind-autodocs] `forceSingleDoc` is deprecated. Please rename it to `singleDoc` in your Storybook config.'
+        );
+    }
     return new AddonOptions(
         options.defaultPath,
         options.sections,
-        options.forceSingleDoc
+        options.singleDoc ?? options.forceSingleDoc
     );
 }
 

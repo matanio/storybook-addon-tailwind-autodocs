@@ -13,7 +13,7 @@ describe('CsfGenerator', () => {
                 { name: 'Colors', path: 'Theme/Colors' },
                 { name: 'Typography', path: 'Theme/Typography' },
             ],
-            forceSingleDoc: undefined,
+            singleDoc: undefined,
         } as AddonOptions;
 
         vi.mocked(AddonOptions).mockReturnValue(mockAddonOptions);
@@ -76,7 +76,7 @@ describe('CsfGenerator', () => {
         expect(result).toContain('32px');
     });
 
-    it('generates multi-story when forceSingleDoc is not set', () => {
+    it('generates multi-story when singleDoc is not set', () => {
         const generator = new CsfGenerator(mockAddonOptions);
         const result = generator.generate([], {
             type: {},
@@ -87,8 +87,8 @@ describe('CsfGenerator', () => {
         expect(result).toContain('export const Typography');
     });
 
-    it('generates single story when forceSingleDoc is set', () => {
-        mockAddonOptions.forceSingleDoc = {
+    it('generates single story when singleDoc is set', () => {
+        mockAddonOptions.singleDoc = {
             name: 'All Theme',
             path: 'Theme/All Theme',
         };
@@ -104,7 +104,7 @@ describe('CsfGenerator', () => {
     });
 
     it('includes HorizontalRule between sections in single story', () => {
-        mockAddonOptions.forceSingleDoc = {
+        mockAddonOptions.singleDoc = {
             name: 'AllTheme',
             path: 'Theme/AllTheme',
         };
@@ -121,7 +121,7 @@ describe('CsfGenerator', () => {
 
     it('does not include HorizontalRule after last section in single story', () => {
         mockAddonOptions.sections = [{ name: 'Colors', path: 'Theme/Colors' }];
-        mockAddonOptions.forceSingleDoc = {
+        mockAddonOptions.singleDoc = {
             name: 'AllTheme',
             path: 'Theme/AllTheme',
         };
@@ -152,7 +152,7 @@ describe('CsfGenerator', () => {
         mockAddonOptions.sections = [
             { name: 'Typography', path: 'Theme/Typography' },
         ];
-        mockAddonOptions.forceSingleDoc = {
+        mockAddonOptions.singleDoc = {
             name: 'All Theme',
             path: 'Theme/All Theme',
         };

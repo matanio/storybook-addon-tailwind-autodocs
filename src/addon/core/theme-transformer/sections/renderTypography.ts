@@ -8,6 +8,12 @@ export function renderTypography(typography: Typography): string {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
     const hasFontFamily = fontFamilies.length > 0;
 
+    const defaultTheme = require('tailwindcss/defaultTheme');
+    const defaultFontKeys = new Set(Object.keys(defaultTheme.fontFamily || {}));
+    const customFontKeys = fontFamilies
+        .filter(([label]) => !defaultFontKeys.has(label))
+        .map(([label]) => label);
+
     return `
         <Title>Typography</Title>
         <br />
@@ -20,6 +26,7 @@ export function renderTypography(typography: Typography): string {
                     <div>
                         <b>Font Face: </b>
                         <span style={{ fontFamily }}>{label}</span>
+                        {${JSON.stringify(customFontKeys)}.includes(label) && <CustomBadge>Custom</CustomBadge>}
                     </div>
                     <div>
                         <b>Weights: </b>
