@@ -53,6 +53,7 @@ export class CsfGenerator {
 
         const Wrapper = styled.div(({ theme }) => ({
           background: theme.background.content,
+          color: theme.color.defaultText,
           display: 'flex',
           flexDirection: 'row-reverse',
           justifyContent: 'center',
