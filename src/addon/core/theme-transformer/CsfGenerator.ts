@@ -67,7 +67,8 @@ export class CsfGenerator {
         const Container = styled.div(() => ({
             maxWidth: '1000px',
             width: '100%',
-            minWidth: '0px'
+            minWidth: '0px',
+            overflowX: 'auto',
         }));
 
         // Inspired by https://github.com/storybookjs/storybook/blob/main/code/addons/docs/src/blocks/components/DocsPage.tsx
