@@ -215,16 +215,16 @@ describe('AddonOptions', () => {
         });
     });
 
-    describe('singleDoc', () => {
+    describe('forceSingleDoc', () => {
         it('sets singleDoc when provided as object', () => {
             const override = { name: 'Colors', path: 'MyPath' };
             const options = new AddonOptions('Base/', ['Colors'], override);
-            expect(options.singleDoc).toEqual(override);
+            expect(options.forceSingleDoc).toEqual(override);
         });
 
         it('sets singleDoc when provided as string', () => {
             const options = new AddonOptions('Base/', ['Colors'], 'Colors');
-            expect(options.singleDoc).toEqual({
+            expect(options.forceSingleDoc).toEqual({
                 name: 'Colors',
                 path: 'Base/Colors',
             });
@@ -233,7 +233,7 @@ describe('AddonOptions', () => {
         it('normalizes singleDoc with path ending slash', () => {
             const override = { name: 'Colors', path: 'Base/' };
             const options = new AddonOptions('Base/', ['Colors'], override);
-            expect(options.singleDoc).toEqual({
+            expect(options.forceSingleDoc).toEqual({
                 name: 'Colors',
                 path: 'Base/Colors',
             });
@@ -242,7 +242,7 @@ describe('AddonOptions', () => {
         it('normalizes singleDoc with path "/"', () => {
             const override = { name: 'Colors', path: '/' };
             const options = new AddonOptions('Base/', ['Colors'], override);
-            expect(options.singleDoc).toEqual({
+            expect(options.forceSingleDoc).toEqual({
                 name: 'Colors',
                 path: 'Colors',
             });
@@ -250,7 +250,7 @@ describe('AddonOptions', () => {
 
         it('singleDoc is undefined when not provided', () => {
             const options = new AddonOptions('Base/', ['Colors']);
-            expect(options.singleDoc).toBeUndefined();
+            expect(options.forceSingleDoc).toBeUndefined();
         });
     });
 });

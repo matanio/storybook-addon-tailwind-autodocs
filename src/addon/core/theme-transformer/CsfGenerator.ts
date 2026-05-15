@@ -16,11 +16,11 @@ export class CsfGenerator {
     }
 
     public generate(colors: Color[], typography: Typography): string {
-        if (this.addonOptions.singleDoc !== undefined) {
+        if (this.addonOptions.forceSingleDoc !== undefined) {
             return this.generateSingleStory(
                 colors,
                 typography,
-                sanitizeExportName(this.addonOptions.singleDoc.name)
+                sanitizeExportName(this.addonOptions.forceSingleDoc.name)
             );
         }
         return this.generateMultiStory(colors, typography);

@@ -9,20 +9,20 @@ import { VALID_SECTIONS } from '../../constants';
 export class AddonOptions {
     private readonly defaultPath: string;
     public sections: NormalizedSection[];
-    public singleDoc?: NormalizedSection;
+    public forceSingleDoc?: NormalizedSection;
 
     constructor(
         defaultPath: string = 'Tailwind Theme/',
         sections: TailwindSectionInput[] = VALID_SECTIONS,
-        singleDoc?: CustomSectionInput
+        forceSingleDoc?: CustomSectionInput
     ) {
         this.validateDefaultPath(defaultPath);
         this.validateSections(sections);
-        this.validateSingleSectionOverride(singleDoc);
+        this.validateSingleSectionOverride(forceSingleDoc);
         this.defaultPath = defaultPath;
         this.sections = this.normalizeSections(sections);
-        if (singleDoc === undefined) return;
-        this.singleDoc = this.normalizeSection(singleDoc);
+        if (forceSingleDoc === undefined) return;
+        this.forceSingleDoc = this.normalizeSection(forceSingleDoc);
     }
 
     private validateDefaultPath(defaultPath: string) {
