@@ -7,6 +7,7 @@ import {
 import { ResolvedConfig, ThemeCssVariables } from '../../../types';
 import { readFileSync } from 'fs';
 import { ThemeCssParser } from '../parsers';
+import { deepMerge } from '../../../util';
 
 export class CssLoader extends ThemeLoader {
     public matchingRegex: RegExp = TAILWIND_CSS_REGEX;
@@ -62,22 +63,22 @@ export class CssLoader extends ThemeLoader {
                 theme: {
                     colors: parsedTheme.isDefaultOverridden('color')
                         ? mapped.colors
-                        : this.deepMerge(baseColors, mapped.colors),
+                        : deepMerge(baseColors, mapped.colors),
                     fontFamily: parsedTheme.isDefaultOverridden('font')
                         ? mapped.fontFamily
-                        : this.deepMerge(
+                        : deepMerge(
                               defaultTheme.fontFamily || {},
                               mapped.fontFamily
                           ),
                     fontWeight: parsedTheme.isDefaultOverridden('font-weight')
                         ? mapped.fontWeight
-                        : this.deepMerge(
+                        : deepMerge(
                               defaultTheme.fontWeight || {},
                               mapped.fontWeight
                           ),
                     fontSize: parsedTheme.isDefaultOverridden('text')
                         ? mapped.fontSize
-                        : this.deepMerge(
+                        : deepMerge(
                               defaultTheme.fontSize || {},
                               mapped.fontSize
                           ),
@@ -125,27 +126,4 @@ export class CssLoader extends ThemeLoader {
         return grouped;
     }
 
-    private deepMerge = (target: any, source: any): any => {
-        const output = { ...target };
-
-        if (this.isObject(target) && this.isObject(source)) {
-            Object.keys(source).forEach(key => {
-                if (this.isObject(source[key])) {
-                    if (!(key in target)) {
-                        Object.assign(output, { [key]: source[key] });
-                    } else {
-                        output[key] = this.deepMerge(target[key], source[key]);
-                    }
-                } else {
-                    Object.assign(output, { [key]: source[key] });
-                }
-            });
-        }
-
-        return output;
-    };
-
-    private isObject = (item: any): boolean => {
-        return item && typeof item === 'object' && !Array.isArray(item);
-    };
 }

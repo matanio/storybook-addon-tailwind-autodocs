@@ -2,6 +2,7 @@ import { Color } from './Color';
 import { Typography } from '../../types';
 import { AddonOptions } from './AddonOptions';
 import { sanitizeExportName } from '../../util';
+import { renderColors, renderTypography } from './sections';
 
 export class CsfGenerator {
     private addonOptions: AddonOptions;
@@ -29,6 +30,7 @@ export class CsfGenerator {
         return `
         import { styled, ThemeProvider, themes, ensure } from 'storybook/theming';
         import { ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks';
+        import { useGlobals } from 'storybook/preview-api';
 
         export default {
             title: 'Theme',
@@ -37,16 +39,21 @@ export class CsfGenerator {
                 options: { bottomPanelHeight: 0 }
             },
             decorators: [
-                (Story) => (
-                    <ThemeProvider theme={ensure(themes.light)}>
-                        <Story />
-                    </ThemeProvider>
-                )
+                (Story) => {
+                    const [globals] = useGlobals();
+                    const isDark = globals['darkMode'] === true || globals['theme'] === 'dark';
+                    return (
+                        <ThemeProvider theme={ensure(isDark ? themes.dark : themes.light)}>
+                            <Story />
+                        </ThemeProvider>
+                    );
+                }
             ]
         };
 
         const Wrapper = styled.div(({ theme }) => ({
           background: theme.background.content,
+          color: theme.color.defaultText,
           display: 'flex',
           flexDirection: 'row-reverse',
           justifyContent: 'center',
@@ -60,7 +67,8 @@ export class CsfGenerator {
         const Container = styled.div(() => ({
             maxWidth: '1000px',
             width: '100%',
-            minWidth: '0px'
+            minWidth: '0px',
+            overflowX: 'auto',
         }));
 
         // Inspired by https://github.com/storybookjs/storybook/blob/main/code/addons/docs/src/blocks/components/DocsPage.tsx
@@ -121,6 +129,21 @@ export class CsfGenerator {
             WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
             WebkitOverflowScrolling: 'touch',
         }));
+
+        const CustomBadge = styled.span(({ theme }) => ({
+            display: 'inline-block',
+            fontSize: '10px',
+            fontFamily: theme.typography.fonts.base,
+            fontWeight: theme.typography.weight.bold,
+            color: theme.color.secondary,
+            border: \`1px solid \${theme.color.secondary}\`,
+            borderRadius: '3px',
+            padding: '1px 5px',
+            marginLeft: '8px',
+            verticalAlign: 'middle',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+        }));
         `;
     }
 
@@ -139,7 +162,7 @@ export class CsfGenerator {
         render: () => (
             <Wrapper>
                 <Container>
-                    ${this.renderColors(colors)}
+                    ${renderColors(colors)}
                 </Container>
             </Wrapper>
         )
@@ -154,7 +177,7 @@ export class CsfGenerator {
         render: () => (
             <Wrapper>
                 <Container>
-                    ${this.renderTypography(typography)}
+                    ${renderTypography(typography)}
                 </Container>
             </Wrapper>
         )
@@ -174,10 +197,10 @@ export class CsfGenerator {
         const elements: string[] = [];
         enabledSections.forEach((section, idx) => {
             if (section === 'Colors') {
-                elements.push(this.renderColors(colors));
+                elements.push(renderColors(colors));
             }
             if (section === 'Typography') {
-                elements.push(this.renderTypography(typography));
+                elements.push(renderTypography(typography));
             }
             if (idx < enabledSections.length - 1) {
                 elements.push('<HorizontalRule />');
@@ -197,80 +220,4 @@ export class CsfGenerator {
         `;
     }
 
-    private renderColors(colors: Color[]): string {
-        const hasColors = colors.length > 0;
-        return `
-        <Title>Colors</Title>
-        <br />
-        ${
-            hasColors
-                ? `
-        <ColorPalette>
-            {${JSON.stringify(colors)}.map((color) => (
-                <ColorItem
-                    key={color.baseName}
-                    title={color.baseName}
-                    subtitle={color.subtitle}
-                    colors={color.shades}
-                />
-            ))}
-        </ColorPalette>
-        `
-                : `
-        <NoneDetectedText>
-            No colors detected. To see a color, add it to your Tailwind configuration, or ensure Tailwind's defaults are not being overridden.
-        </NoneDetectedText>
-        `
-        }
-        `;
-    }
-
-    private renderTypography(typography: Typography): string {
-        const fontSizes = Object.values(typography.size);
-        const fontWeights = Object.entries(typography.weight);
-        const fontFamilies = Object.entries(typography.type);
-        const sampleText =
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-        const hasFontFamily = fontFamilies.length > 0; // TODO: Update this handling so that it handles just weight and/or just size
-
-        return `
-        <Title>Typography</Title>
-        <br />
-        ${
-            hasFontFamily
-                ? `
-        {${JSON.stringify(fontFamilies)}.map(([label, fontFamily], familyIndex) => (
-            <div key={label}>
-                <FontHeaderSection>
-                    <div>
-                        <b>Font Face: </b>
-                        <span style={{ fontFamily }}>{label}</span>
-                    </div>
-                    <div>
-                        <b>Weights: </b>
-                        {${JSON.stringify(fontWeights)}.map(([weightLabel, weightValue], index) => (
-                            <span key={weightLabel} style={{ fontWeight: weightValue, fontFamily }}>
-                                {\`\${weightValue}(\${weightLabel})\${index < ${fontWeights.length} - 1 ? ', ' : ''}\`}
-                            </span>
-                        ))}
-                    </div>
-                </FontHeaderSection>
-                <Typeset
-                    fontSizes={${JSON.stringify(fontSizes)}}
-                    fontWeight={400}
-                    sampleText="${sampleText}"
-                    fontFamily={fontFamily}
-                />
-                {familyIndex < ${fontFamilies.length} - 1 && <HorizontalRule />}
-            </div>
-        ))}
-        `
-                : `
-        <NoneDetectedText>
-            No font families detected. To see typography, add a font family to your Tailwind configuration, or ensure Tailwind's defaults are not being overridden.
-        </NoneDetectedText>
-        `
-        }
-        `;
-    }
 }
